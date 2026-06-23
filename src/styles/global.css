@@ -1,0 +1,137 @@
+/* ==========================================================================
+   1. SISTEMA DE TEMAS (DARK / CREME) E VARIÁVEIS CENTRAIS
+   ========================================================================== */
+
+/* Tema Padrão: Modo Escuro (Dark) */
+:root, :root[data-theme="dark"] {
+  --bg-principal: #0a0a0c; /* Fundo geral preto profundo */
+  --bg-card: #181822; /* AJUSTE: Clareado de #141418 para #181822 para dar mais contraste com o fundo */
+  --border-color: #2b2b3a; /* AJUSTE: Clareado levemente para destacar os limites do card em repouso */
+  --texto-principal: #f3f4f6;
+  --texto-secundario: #94a3b8;
+  
+  /* Paleta de Cores Neon Ativas */
+  --neon-cyan: #00f3ff;
+  --neon-magenta: #ff007f;
+  --neon-green: #39ff14;
+  --neon-orange: #ffaa00;
+
+  /* Física de Volume: Sombras densas para o efeito de flutuar/pular para fora */
+  --sombra-card: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --sombra-hover: 0 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* Tema Alternativo: Modo Claro (Creme Confortável) */
+:root[data-theme="light"] {
+  --bg-principal: #fcfaf2; /* Creme suave amigável aos olhos */
+  --bg-card: #f2ebd9; /* AJUSTE: Ajustado levemente para destacar melhor contra o fundo creme */
+  --border-color: #dfd4bc;
+  --texto-principal: #1c1a17;
+  --texto-secundario: #706553;
+  
+  /* Paleta Neon adaptada com tons mais escuros para manter o contraste no fundo claro */
+  --neon-cyan: #008fa3;
+  --neon-magenta: #c7005f;
+  --neon-green: #1f8207;
+  --neon-orange: #d17a00;
+
+  /* Física de Volume para o tema claro (sombras mais suaves e orgânicas) */
+  --sombra-card: 0 10px 30px rgba(112, 101, 83, 0.12);
+  --sombra-hover: 0 20px 40px rgba(112, 101, 83, 0.25);
+}
+
+/* ==========================================================================
+   2. REGRAS GERAIS DE ESTRUTURA
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-principal);
+  color: var(--texto-principal);
+  font-family: system-ui, sans-serif;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
+  
+  /* LINHA MÁGICA: Reserva o espaço da barra de rolagem permanentemente. */
+  /* Isso impede o site de dar aquele tranco para o lado entre páginas curtas e longas! */
+  scrollbar-gutter: stable; 
+}
+
+
+/* ==========================================================================
+   3. FÍSICA DE VOLUME E COMPORTAMENTO DOS CARDS
+   ========================================================================== */
+.card-volume {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: var(--sombra-card);
+  /* Transição usando cubic-bezier para simular uma mola mecânica ao mover o mouse */
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+              box-shadow 0.4s ease, 
+              border-color 0.4s ease;
+  will-change: transform, box-shadow, border-color;
+}
+
+/* O comportamento ao passar o mouse: salta para fora e acende a borda em neon verde */
+.card-volume:hover {
+  transform: translateY(-8px) scale(1.01); /* Salta fisicamente para cima e cresce 1% */
+  box-shadow: var(--sombra-hover); /* Sombra projeta para baixo, simulando altura */
+  border-color: var(--neon-green); /* A borda acende em neon */
+}
+
+
+/* ==========================================================================
+   4. CUSTOMIZAÇÃO DAS VIEW TRANSITIONS (Ajuste de Suavidade e Tempo)
+   ========================================================================== */
+
+/* Remove as animações nativas agressivas do navegador para podermos controlá-las */
+::view-transition-old(root),
+::view-transition-new(root) {
+  /* AJUSTE CENTRAL: Mude '0.4s' para o tempo que preferir (ex: 0.6s para ultra lento) */
+  animation-duration: 0.4s; 
+  
+  /* Curva de aceleração: ease-in-out começa lento, acelera e termina suave */
+  animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); 
+}
+
+/* Regra específica para o momento em que a página antiga descolore/some */
+::view-transition-old(root) {
+  animation-name: fade-out;
+}
+
+/* Regra específica para o momento em que a página nova colore/aparece */
+::view-transition-new(root) {
+  animation-name: fade-in;
+}
+
+/* As físicas brutas de Opacidade em CSS Puro para criar o efeito esmaecido */
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ==========================================================================
+   5. CUSTOMIZAÇÃO DAS VIEW TRANSITIONS (Suavidade Pura no Conteúdo)
+   ========================================================================== */
+
+/* Remove a animação bruta do fundo do site para impedir o flash preto/branco */
+::view-transition-group(root) {
+  animation: none;
+}
+
+/* Aplica o efeito de fade suave apenas no conteúdo que realmente muda */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+}

@@ -1,0 +1,68 @@
+<!-- src/components/Galeria.astro -->
+<section class="card-volume item-cinema">
+  <img src="https://picsum.photos" alt="Cena do acervo histórico" loading="lazy" />
+  
+  <!-- TAG DE DESCRIÇÃO CENTRALIZADA NA BASE -->
+  <div class="tag-base">
+    <div class="badge-conteudo">
+      <span class="ponto-status"></span>
+      <p>Resgate Histórico: Gravações de Campo (1974)</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .item-cinema {
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .item-cinema img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Posicionamento magnético da tag na base centro */
+  .tag-base {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .badge-conteudo {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  }
+
+  .ponto-status {
+    width: 6px;
+    height: 6px;
+    background-color: var(--neon-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--neon-cyan);
+  }
+
+  .badge-conteudo p {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+</style>
+
+

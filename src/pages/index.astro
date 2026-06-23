@@ -1,0 +1,38 @@
+---
+// 1. IMPORTAÇÃO DO LAYOUT BASE (A casca que contém as fontes, css, menu e botão de tema)
+import Layout from '../layouts/Layout.astro';
+---
+
+<!-- 2. ENVELOPANDO A PÁGINA: Passamos o título do Canal 1 para o Layout -->
+<Layout title="Canal 1 - Home | Meu Console Portfolio">
+  
+  <!-- Todo o HTML digitado aqui dentro será injetado automaticamente na tag <slot /> do Layout -->
+  <section class="card-volume welcome-panel">
+    <h1>CONSOLES DE NAVEGAÇÃO</h1>
+    <p class="matrix-text">Status do Sistema: Online e operando em HTML/CSS Puro.</p>
+    <p>Este é o Canal 1 (Home). Use os botões acesos em neon no topo da tela para navegar entre os outros 7 canais estáticos e testar a alternância física de temas no canto inferior.</p>
+  </section>
+
+</Layout>
+
+<style>
+  /* Estilização local exclusiva para os elementos desta página inicial */
+  .welcome-panel {
+    padding: 3rem 2rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--texto-principal);
+  }
+
+  .matrix-text {
+    color: var(--neon-green);
+    text-shadow: 0 0 5px var(--neon-green);
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+</style>

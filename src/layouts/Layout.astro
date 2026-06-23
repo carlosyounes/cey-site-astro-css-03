@@ -1,0 +1,123 @@
+---
+// 1. IMPORTAÇÃO DOS COMPONENTES E DO MOTOR DE CORES
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+// Importa o roteador cliente nativo para gerenciar as View Transitions
+import { ClientRouter } from 'astro:transitions';
+
+const { title = "Meu Console Portfolio" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+
+    <!-- ATIVAÇÃO DAS TRANSIÇÕES DO ASTRO -->
+    <ClientRouter />
+
+    <!-- PRE-CARREGAMENTO AGRESSIVO DE FONTES -->
+    <link rel="preload" href="/src/fonts/orbitron.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/src/fonts/plusjakarta-variable.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/src/fonts/jetbrainsmono.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    
+    <!-- BARREIRA CRÍTICA CONTRA FLASH DE TEMA (Executa na carga inicial da aba) -->
+    <script is:inline>
+      // Função rápida para injetar o tema correto na tag <html>
+      const applyTheme = () => {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      };
+      
+      // Executa imediatamente
+      applyTheme();
+
+      // MÁGICA ANTI-FLASH: Escuta o exato momento em que o Astro troca de página.
+      // Ele injeta o tema na nova página antes do navegador desenhar o primeiro frame!
+      document.addEventListener('astro:after-swap', applyTheme);
+    </script>
+
+    <!-- ESTILO CRÍTICO INLINE -->
+    <style is:inline>
+      @font-face {
+        font-family: 'Orbitron';
+        src: url('/src/fonts/orbitron.woff2') format('woff2');
+        font-weight: 400 900;
+        font-style: normal;
+        font-display: block;
+      }
+
+      @font-face {
+        font-family: 'Plus Jakarta';
+        src: url('/src/fonts/plusjakarta-variable.woff2') format('woff2');
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: block;
+      }
+
+      @font-face {
+        font-family: 'JetBrains Mono';
+        src: url('/src/fonts/jetbrainsmono.woff2') format('woff2');
+        font-weight: 100 800;
+        font-style: normal;
+        font-display: block;
+      }
+
+      html {
+        scrollbar-gutter: stable !important;
+        /* AJUSTE: Força o navegador a entender que o site trabalha nativamente com ambos os temas */
+        color-scheme: dark light; 
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        background-color: #0a0a0c !important; 
+        color: #f3f4f6 !important;
+      }
+
+      [data-theme="light"] body {
+        background-color: #fcfaf2 !important;
+        color: #1c1a17 !important;
+      }
+
+      h1, h2, h3, .logo, .btn-txt {
+        font-family: 'Orbitron', sans-serif !important;
+      }
+
+      body, p, li {
+        font-family: 'Plus Jakarta', sans-serif !important;
+      }
+
+      code, pre, .lcd-display, .matrix-text {
+        font-family: 'JetBrains Mono', monospace !important;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <Navbar />
+
+    <!-- O miolo do site animado em fade de 0.4s pelo seu global.css -->
+    <main transition:animate="fade">
+      <slot />
+    </main>
+
+    <ThemeToggle />
+  </body>
+</html>
+
+<style>
+  main {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+</style>
