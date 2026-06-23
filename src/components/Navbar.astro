@@ -13,7 +13,7 @@ const isActive = (path: string) => {
   <div class="navbar-container">
     
     <!-- LOGO -->
-    <a href="/" class="logo">PORTFÓLIO</a>
+    <a href="/" class="logo">CEY MUSIC</a>
 
     <!-- NAVEGAÇÃO DE 8 BOTÕES FÍSICOS EM NEON -->
     <nav class="menu-neon">
@@ -66,11 +66,14 @@ const isActive = (path: string) => {
   .navbar-header {
     width: 100%;
     background-color: var(--bg-principal);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 3px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 900;
     transition: background-color 0.4s ease, border-color 0.4s ease;
+
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5); /* Sombra interna simula que ele entrou no painel */
+  
   }
 
   .navbar-container {
@@ -84,13 +87,16 @@ const isActive = (path: string) => {
   }
 
   .logo {
-    font-weight: 900;
-    font-size: 1.3rem;
+    font-weight: 800;
+    font-size: 1.7rem;
     color: var(--texto-principal);
     text-decoration: none;
+    text-align: center;
     letter-spacing: 2px;
     align-self: flex-start;
     transition: color 0.4s ease;
+
+    
   }
 
   /* GRADE MOBILE (4 COLUNAS) */
@@ -104,6 +110,7 @@ const isActive = (path: string) => {
   /* AJUSTE: Transformado em um botão físico completo com contorno nos 4 lados */
   .item-neon {
     text-decoration: none;
+    text-transform: uppercase; 
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -139,15 +146,10 @@ const isActive = (path: string) => {
     transition: color 0.3s ease;
   }
 
-  /* A pequena linha indicadora de LED abaixo do texto */
-  .linha {
-    width: 16px; /* Reduzida para parecer uma pequena lâmpada/traço de LED centralizado */
-    height: 3px;
-    background-color: transparent;
-    border-radius: 4px;
-    margin-top: 6px;
-    transition: all 0.3s ease;
-  }
+
+
+
+  
 
   /* ==========================================================================
      ESTADO ATIVO: O BOTÃO TRAVADO ACESO NO PAINEL
@@ -171,6 +173,11 @@ const isActive = (path: string) => {
   }
 
   /* COMPORTAMENTO DESKTOP (Telas Maiores) */
+
+
+
+
+  
   @media (min-width: 768px) {
     .navbar-container {
       flex-direction: row;

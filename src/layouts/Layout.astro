@@ -1,5 +1,6 @@
 ---
 // 1. IMPORTAÇÃO DOS COMPONENTES E DO MOTOR DE CORES
+
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
@@ -9,6 +10,11 @@ import { ClientRouter } from 'astro:transitions';
 
 const { title = "Meu Console Portfolio" } = Astro.props;
 ---
+
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -27,7 +33,7 @@ const { title = "Meu Console Portfolio" } = Astro.props;
     <link rel="preload" href="/src/fonts/jetbrainsmono.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
     
     <!-- BARREIRA CRÍTICA CONTRA FLASH DE TEMA (Executa na carga inicial da aba) -->
-    <script is:inline>
+   <!-- <script is:inline>
       // Função rápida para injetar o tema correto na tag <html>
       const applyTheme = () => {
         const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -40,7 +46,47 @@ const { title = "Meu Console Portfolio" } = Astro.props;
       // MÁGICA ANTI-FLASH: Escuta o exato momento em que o Astro troca de página.
       // Ele injeta o tema na nova página antes do navegador desenhar o primeiro frame!
       document.addEventListener('astro:after-swap', applyTheme);
-    </script>
+    </script>  -->
+
+
+
+<!-- Script de Bloqueio de Flicker (Injeta o tema creme antes do HTML desenhar) -->
+   <!-- <script is:inline>
+      function aplicarTemaDefinitivo() {
+        const temaSalvo = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', temaSalvo);
+      }
+
+      // Executa no primeiro carregamento
+      aplicarTemaDefinitivo();
+
+      // Executa instantaneamente na troca de cada uma das 9 páginas
+      document.addEventListener('astro:after-swap', aplicarTemaDefinitivo);
+    </script>   -->
+
+
+
+  <script is:inline>
+    (() => {
+      const getTheme = () => {
+        const saved = localStorage.getItem('theme');
+        return saved === 'light' || saved === 'dark' ? saved : 'dark';
+      };
+
+      const applyTheme = () => {
+        const theme = getTheme();
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.style.colorScheme = theme === 'light' ? 'light' : 'dark';
+      };
+
+      applyTheme();
+      document.addEventListener('astro:after-swap', applyTheme);
+    })();
+  </script>
+
+
+
+
 
     <!-- ESTILO CRÍTICO INLINE -->
     <style is:inline>
@@ -70,21 +116,22 @@ const { title = "Meu Console Portfolio" } = Astro.props;
 
       html {
         scrollbar-gutter: stable !important;
-        /* AJUSTE: Força o navegador a entender que o site trabalha nativamente com ambos os temas */
-        color-scheme: dark light; 
+        color-scheme: dark light;
+        background-color: #0a0a0c;
       }
 
       body {
         margin: 0;
         padding: 0;
         overflow-x: hidden;
-        background-color: #0a0a0c !important; 
-        color: #f3f4f6 !important;
+        background-color: #0a0a0c;
+        color: #f3f4f6;
+        min-height: 100vh;
       }
 
-      [data-theme="light"] body {
-        background-color: #fcfaf2 !important;
-        color: #1c1a17 !important;
+      html[data-theme="light"] body {
+        background-color: #e7c46e;
+        color: #2b2416;
       }
 
       h1, h2, h3, .logo, .btn-txt {
