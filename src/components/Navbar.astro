@@ -2,9 +2,18 @@
 /* Painel de Controle do Astro para detecção automática de URLs */
 const { pathname } = Astro.url;
 
+// Captura automaticamente a subpasta do repositório ("/cey-site-astro-css-03/")
+const baseUrl = import.meta.env.BASE_URL;
+
 const isActive = (path: string) => {
-  if (path === '/' && pathname === '/') return 'active';
-  if (path !== '/' && pathname.startsWith(path)) return 'active';
+  // Ajusta o pathname removendo a barra final se existir, para bater com o path
+  const cleanPathname = pathname.endsWith('/') && pathname !== baseUrl ? pathname.slice(0, -1) : pathname;
+  
+  // Monta o caminho completo esperado baseado no repositório
+  const targetPath = path === '/' ? baseUrl : `${baseUrl}${path}`;
+  
+  if (path === '/' && cleanPathname === baseUrl) return 'active';
+  if (path !== '/' && cleanPathname.startsWith(targetPath)) return 'active';
   return '';
 };
 ---
@@ -12,48 +21,48 @@ const isActive = (path: string) => {
 <header class="navbar-header">
   <div class="navbar-container">
     
-    <!-- LOGO -->
-    <a href="./" class="logo">CEY MUSIC</a>
+    <!-- LOGO (Aponta de volta para a raiz do repositório) -->
+    <a href={baseUrl} class="logo">CEY MUSIC</a>
 
     <!-- NAVEGAÇÃO DE 8 BOTÕES FÍSICOS EM NEON -->
     <nav class="menu-neon">
       
-      <a href="./" class={`item-neon ${isActive('/')}`} style="--cor: var(--neon-cyan)">
+      <a href={baseUrl} class={`item-neon ${isActive('/')}`} style="--cor: var(--neon-cyan)">
         <span class="btn-txt">Home</span>
         <div class="linha"></div>
       </a>
 
-      <a href="./musica" class={`item-neon ${isActive('/musica')}`} style="--cor: var(--neon-magenta)">
+      <a href={`${baseUrl}musica/`} class={`item-neon ${isActive('musica')}`} style="--cor: var(--neon-magenta)">
         <span class="btn-txt">Música</span>
         <div class="linha"></div>
       </a>
 
-      <a href="tecnologia" class={`item-neon ${isActive('/tecnologia')}`} style="--cor: var(--neon-green)">
+      <a href={`${baseUrl}tecnologia/`} class={`item-neon ${isActive('tecnologia')}`} style="--cor: var(--neon-green)">
         <span class="btn-txt">Tecnologia</span>
         <div class="linha"></div>
       </a>
 
-      <a href="./produtos" class={`item-neon ${isActive('/produtos')}`} style="--cor: var(--neon-orange)">
+      <a href={`${baseUrl}produtos/`} class={`item-neon ${isActive('produtos')}`} style="--cor: var(--neon-orange)">
         <span class="btn-txt">Produtos</span>
         <div class="linha"></div>
       </a>
 
-      <a href="servicos" class={`item-neon ${isActive('/servicos')}`} style="--cor: var(--neon-cyan)">
+      <a href={`${baseUrl}servicos/`} class={`item-neon ${isActive('servicos')}`} style="--cor: var(--neon-cyan)">
         <span class="btn-txt">Serviços</span>
         <div class="linha"></div>
       </a>
 
-      <a href="arte-educacao" class={`item-neon ${isActive('/arte-educacao')}`} style="--cor: var(--neon-magenta)">
+      <a href={`${baseUrl}arte-educacao/`} class={`item-neon ${isActive('arte-educacao')}`} style="--cor: var(--neon-magenta)">
         <span class="btn-txt">Arte/Educ</span>
         <div class="linha"></div>
       </a>
 
-      <a href="artigos" class={`item-neon ${isActive('/artigos')}`} style="--cor: var(--neon-green)">
+      <a href={`${baseUrl}artigos/`} class={`item-neon ${isActive('artigos')}`} style="--cor: var(--neon-green)">
         <span class="btn-txt">Artigos</span>
         <div class="linha"></div>
       </a>
 
-      <a href="contatos" class={`item-neon ${isActive('/contatos')}`} style="--cor: var(--neon-orange)">
+      <a href={`${baseUrl}contatos/`} class={`item-neon ${isActive('contatos')}`} style="--cor: var(--neon-orange)">
         <span class="btn-txt">Contatos</span>
         <div class="linha"></div>
       </a>
@@ -146,11 +155,6 @@ const isActive = (path: string) => {
     transition: color 0.3s ease;
   }
 
-
-
-
-  
-
   /* ==========================================================================
      ESTADO ATIVO: O BOTÃO TRAVADO ACESO NO PAINEL
      ========================================================================== */
@@ -173,11 +177,6 @@ const isActive = (path: string) => {
   }
 
   /* COMPORTAMENTO DESKTOP (Telas Maiores) */
-
-
-
-
-  
   @media (min-width: 768px) {
     .navbar-container {
       flex-direction: row;
