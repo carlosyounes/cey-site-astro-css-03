@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://github.io', // Seu link base do GitHub
-  base: '/cey-site-astro-css-03',         // O nome exato do seu repositório
+  site: 'https://github.io',
+  base: '/cey-site-astro-css-03',
+  trailingSlash: 'always', // 👈 ADICIONE ESSA LINHA EXATAMENTE AQUI!
 });
