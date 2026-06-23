@@ -1,20 +1,19 @@
 ---
 // 1. IMPORTAÇÃO DOS COMPONENTES E DO MOTOR DE CORES
-
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+
+// Importações locais das fontes para o Astro calcular as URLs corretas automaticamente no Deploy
+import orbitronUrl from '../fonts/orbitron.woff2';
+import plusJakartaUrl from '../fonts/plusjakarta-variable.woff2';
+import jetbrainsMonoUrl from '../fonts/jetbrainsmono.woff2';
 
 // Importa o roteador cliente nativo para gerenciar as View Transitions
 import { ClientRouter } from 'astro:transitions';
 
 const { title = "Meu Console Portfolio" } = Astro.props;
 ---
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -27,72 +26,35 @@ const { title = "Meu Console Portfolio" } = Astro.props;
     <!-- ATIVAÇÃO DAS TRANSIÇÕES DO ASTRO -->
     <ClientRouter />
 
-    <!-- PRE-CARREGAMENTO AGRESSIVO DE FONTES -->
-    <link rel="preload" href="/cey-site-astro-css-03/src/fonts/orbitron.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-    <link rel="preload" href="/cey-site-astro-css-03/src/fonts/plusjakarta-variable.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-    <link rel="preload" href="/cey-site-astro-css-03/src/fonts/jetbrainsmono.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <!-- PRE-CARREGAMENTO DINÂMICO DE FONTES (Utiliza as URLs geradas pelo Astro) -->
+    <link rel="preload" href={orbitronUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={plusJakartaUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={jetbrainsMonoUrl} as="font" type="font/woff2" crossorigin="anonymous" />
     
-    <!-- BARREIRA CRÍTICA CONTRA FLASH DE TEMA (Executa na carga inicial da aba) -->
-   <!-- <script is:inline>
-      // Função rápida para injetar o tema correto na tag <html>
-      const applyTheme = () => {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-      };
-      
-      // Executa imediatamente
-      applyTheme();
+    <!-- BARREIRA CRÍTICA CONTRA FLASH DE TEMA -->
+    <script is:inline>
+      (() => {
+        const getTheme = () => {
+          const saved = localStorage.getItem('theme');
+          return saved === 'light' || saved === 'dark' ? saved : 'dark';
+        };
 
-      // MÁGICA ANTI-FLASH: Escuta o exato momento em que o Astro troca de página.
-      // Ele injeta o tema na nova página antes do navegador desenhar o primeiro frame!
-      document.addEventListener('astro:after-swap', applyTheme);
-    </script>  -->
+        const applyTheme = () => {
+          const theme = getTheme();
+          document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.style.colorScheme = theme === 'light' ? 'light' : 'dark';
+        };
 
+        applyTheme();
+        document.addEventListener('astro:after-swap', applyTheme);
+      })();
+    </script>
 
-
-<!-- Script de Bloqueio de Flicker (Injeta o tema creme antes do HTML desenhar) -->
-   <!-- <script is:inline>
-      function aplicarTemaDefinitivo() {
-        const temaSalvo = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', temaSalvo);
-      }
-
-      // Executa no primeiro carregamento
-      aplicarTemaDefinitivo();
-
-      // Executa instantaneamente na troca de cada uma das 9 páginas
-      document.addEventListener('astro:after-swap', aplicarTemaDefinitivo);
-    </script>   -->
-
-
-
-  <script is:inline>
-    (() => {
-      const getTheme = () => {
-        const saved = localStorage.getItem('theme');
-        return saved === 'light' || saved === 'dark' ? saved : 'dark';
-      };
-
-      const applyTheme = () => {
-        const theme = getTheme();
-        document.documentElement.setAttribute('data-theme', theme);
-        document.documentElement.style.colorScheme = theme === 'light' ? 'light' : 'dark';
-      };
-
-      applyTheme();
-      document.addEventListener('astro:after-swap', applyTheme);
-    })();
-  </script>
-
-
-
-
-
-    <!-- ESTILO CRÍTICO INLINE -->
-    <style is:inline>
+    <!-- ESTILO CRÍTICO INLINE (Injeta as variáveis calculadas pelo Astro) -->
+    <style is:inline define:vars={{ orbitronUrl, plusJakartaUrl, jetbrainsMonoUrl }}>
       @font-face {
         font-family: 'Orbitron';
-        src: url('/src/fonts/orbitron.woff2') format('woff2');
+        src: url(var(--orbitronUrl)) format('woff2');
         font-weight: 400 900;
         font-style: normal;
         font-display: block;
@@ -100,7 +62,7 @@ const { title = "Meu Console Portfolio" } = Astro.props;
 
       @font-face {
         font-family: 'Plus Jakarta';
-        src: url('/src/fonts/plusjakarta-variable.woff2') format('woff2');
+        src: url(var(--plusJakartaUrl)) format('woff2');
         font-weight: 100 900;
         font-style: normal;
         font-display: block;
@@ -108,7 +70,7 @@ const { title = "Meu Console Portfolio" } = Astro.props;
 
       @font-face {
         font-family: 'JetBrains Mono';
-        src: url('/src/fonts/jetbrainsmono.woff2') format('woff2');
+        src: url(var(--jetbrainsMonoUrl)) format('woff2');
         font-weight: 100 800;
         font-style: normal;
         font-display: block;
